@@ -17,3 +17,7 @@ def run_queries():
 
 if __name__ == "__main__":
     run_queries()
+from .models import Library
+
+def get_library_by_name(library_name):
+    return Library.objects.get(name=library_name)
