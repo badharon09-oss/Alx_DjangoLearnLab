@@ -25,3 +25,9 @@ class LibraryDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         context["books"] = self.object.books.all()
         return context
+from django.shortcuts import render
+from .models import Book
+
+def list_books(request):
+    books = Book.objects.all()   # <-- This line is REQUIRED
+    return render(request, "relationship_app/list_books.html", {"books": books})
