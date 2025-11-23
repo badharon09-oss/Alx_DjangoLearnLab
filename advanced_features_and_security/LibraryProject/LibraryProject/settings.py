@@ -119,3 +119,38 @@ CSP_DEFAULT_SRC = ("'self'",)
 CSP_STYLE_SRC = ("'self'", "'unsafe-inline'")
 CSP_SCRIPT_SRC = ("'self'",)
 
+"""
+============================================================
+SECURITY & HTTPS CONFIGURATION
+============================================================
+These settings secure the application by enforcing HTTPS,
+protecting cookies, preventing clickjacking, and enabling
+browser-level XSS protection. Adjust these settings
+appropriately when deploying to production.
+"""
+
+# --- HTTPS Enforcement ---
+# Redirect all HTTP requests → HTTPS
+SECURE_SSL_REDIRECT = True  
+
+# HTTP Strict Transport Security (HSTS)
+# Force browsers to only use HTTPS for the next 1 year.
+SECURE_HSTS_SECONDS = 31536000  
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
+
+# --- Secure Cookies ---
+# Cookies sent ONLY over HTTPS
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+
+# --- Secure Headers ---
+# Prevents clickjacking by disallowing iframe embedding
+X_FRAME_OPTIONS = "DENY"
+
+# Prevent browsers from MIME-sniffing content types
+SECURE_CONTENT_TYPE_NOSNIFF = True
+
+# Enable browser-built XSS filtering
+SECURE_BROWSER_XSS_FILTER = True
+
