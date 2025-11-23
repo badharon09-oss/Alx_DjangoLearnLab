@@ -1,0 +1,10 @@
+<h1>{{ library.name }}</h1>
+<p>Location: {{ library.location }}</p>
+
+<h2>Books Available:</h2>
+
+<ul>
+    {% for book in books %}
+        <li>{{ book.title }}</li>
+    {% endfor %}
+</ul>
