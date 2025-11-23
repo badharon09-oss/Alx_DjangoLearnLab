@@ -4,6 +4,7 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import permission_required
 from django.shortcuts import render
 from .models import Book
+from .forms import ExampleForm
 
 # View Books (requires can_view)
 @permission_required('bookshelf.can_view', raise_exception=True)
