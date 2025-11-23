@@ -154,6 +154,8 @@ SECURE_CONTENT_TYPE_NOSNIFF = True
 # Enable browser-built XSS filtering
 SECURE_BROWSER_XSS_FILTER = True
 INSTALLED_APPS += ['csp']
+# Ensure Django recognizes HTTPS when behind a proxy/load balancer
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 MIDDLEWARE.insert(
     MIDDLEWARE.index('django.middleware.security.SecurityMiddleware') + 1,
