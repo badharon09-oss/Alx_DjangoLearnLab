@@ -25,3 +25,7 @@ def edit_book(request, pk):
 @permission_required('bookshelf.can_delete', raise_exception=True)
 def delete_book(request, pk):
     return render(request, "bookshelf/delete_book.html")
+
+def book_list(request):
+    books = Book.objects.all()
+    return render(request, "bookshelf/book_list.html", {"books": books})
