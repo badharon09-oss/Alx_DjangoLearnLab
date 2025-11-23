@@ -32,6 +32,9 @@ INSTALLED_APPS = [
     'accounts',
     ]
 
+AUTH_USER_MODEL = "accounts.CustomUser"
+AUTH_USER_MODEL = "bookshelf.CustomUser"
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -94,5 +97,4 @@ STATIC_URL = 'static/'
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-AUTH_USER_MODEL = "accounts.CustomUser"
-AUTH_USER_MODEL = "bookshelf.CustomUser"
+
