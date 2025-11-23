@@ -10,7 +10,11 @@ from .models import Book, Library   # REQUIRED by checker
 def list_books(request):
     books = Book.objects.all()   # REQUIRED by checker
     return render(request, "relationship_app/list_books.html", {"books": books})
-
+    
+class LibraryListView(ListView):
+    model = Library
+    template_name = "relationship_app/library_list.html"
+    context_object_name = "libraries"
 
 # -----------------------------
 # CLASS-BASED VIEW
