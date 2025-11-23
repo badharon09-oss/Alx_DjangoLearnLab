@@ -29,3 +29,26 @@ def delete_book(request, pk):
 def book_list(request):
     books = Book.objects.all()
     return render(request, "bookshelf/book_list.html", {"books": books})
+
+from django.shortcuts import render
+from django.db.models import Q
+from .models import Book
+from .forms import BookSearchForm
+
+def book_list(request):
+    form = BookSearchForm(request.GET or None)
+    books = Book.objects.all()
+
+    if form.is_valid():
+        search_query = form.cleaned_data.get("search")
+        if search_query:
+            # Secure: No raw SQL
+            books = books.filter(
+                Q(title__icontains=search_query) |
+                Q(author__icontains=search_query)
+            )
+
+    return render(request, "bookshelf/book_list.html", {
+        "books": books,
+        "form": form
+    })
