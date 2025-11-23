@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.views.generic import DetailView
+from django.views.generic.detail import DetailView
 from django.views.generic import ListView, DetailView
 from .models import Library, Book  # <-- THIS is required
 from .models import Book, Library   # REQUIRED by checker
