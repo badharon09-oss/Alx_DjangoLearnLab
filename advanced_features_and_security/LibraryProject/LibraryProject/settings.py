@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     # Custom apps
     'bookshelf',  # <-- add this after creating the bookshelf app
     'relationship_app',
+    'accounts',
     ]
 
 MIDDLEWARE = [
