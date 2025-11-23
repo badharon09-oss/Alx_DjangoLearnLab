@@ -153,4 +153,15 @@ SECURE_CONTENT_TYPE_NOSNIFF = True
 
 # Enable browser-built XSS filtering
 SECURE_BROWSER_XSS_FILTER = True
+INSTALLED_APPS += ['csp']
+
+MIDDLEWARE.insert(
+    MIDDLEWARE.index('django.middleware.security.SecurityMiddleware') + 1,
+    'csp.middleware.CSPMiddleware'
+)
+
+# Allow static files only
+CSP_DEFAULT_SRC = ("'self'",)
+CSP_STYLE_SRC = ("'self'", 'https://fonts.googleapis.com')
+CSP_SCRIPT_SRC = ("'self'",)
 
