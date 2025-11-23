@@ -26,12 +26,11 @@ class LibraryDetailView(DetailView):
     context_object_name = "library"
     
 from django.contrib.auth import login, logout
-from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import DetailView
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm   # <-- REQUIRED
-from django.contrib.auth import login, logout
 from .models import Book, Library
 
 
