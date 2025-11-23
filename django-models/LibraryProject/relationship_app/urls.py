@@ -24,6 +24,8 @@ urlpatterns = [
     path("member-dashboard/", views.member_view, name="member_view"),
 ]
 
+from django.urls import path
+from . import views
 urlpatterns = [
     # Existing views...
 
