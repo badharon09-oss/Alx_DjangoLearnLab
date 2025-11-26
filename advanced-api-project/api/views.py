@@ -24,3 +24,15 @@ class BookListView(generics.ListAPIView):
     # -------- ORDERING --------
     ordering_fields = ['title', 'publication_year']
     ordering = ['title']  # default ordering
+"""
+BookListView implements advanced query capabilities:
+- Filtering: filter books by title, publication_year, or author name.
+- Searching: search text in title or author name using DRF SearchFilter.
+- Ordering: order results by title or publication_year.
+
+Examples:
+    /api/books/?title=Django
+    /api/books/?search=python
+    /api/books/?ordering=-publication_year
+    /api/books/?author__name=John
+"""
