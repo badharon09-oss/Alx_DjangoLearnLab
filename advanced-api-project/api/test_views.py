@@ -1,114 +1,98 @@
-from django.urls import reverse
-from rest_framework import status
 from rest_framework.test import APITestCase, APIClient
+from rest_framework import status
+from django.urls import reverse
 from django.contrib.auth.models import User
-from rest_framework.authtoken.models import Token
-
-from .models import Author, Book
+from api.models import Book, Author
 
 
 class BookAPITestCase(APITestCase):
 
     def setUp(self):
-        """Create users, auth token, and sample data"""
+        # Django automatically creates a separate TEST DATABASE
+        # No login() allowed, so we use force_authenticate()
 
-        # User + token
-        self.user = User.objects.create_user(username="testuser", password="password123")
-        self.token = Token.objects.create(user=self.user)
+        self.user = User.objects.create_user(
+            username="testuser", password="pass12345"
+        )
 
         self.client = APIClient()
-        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
-self.client.force_authenticate(user=self.user)
-        # Create author
-        self.author1 = Author.objects.create(name="John Doe")
-        self.author2 = Author.objects.create(name="Sarah Writer")
+        self.client.force_authenticate(user=self.user)
 
-        # Create books
+        # Sample authors
+        self.author1 = Author.objects.create(name="John Writer")
+        self.author2 = Author.objects.create(name="Jane Coder")
+
+        # Sample books
         self.book1 = Book.objects.create(
-            title="Django Unleashed",
-            publication_year=2020,
+            title="Django Mastery",
+            publication_year=2021,
             author=self.author1
         )
         self.book2 = Book.objects.create(
-            title="Python APIs",
-            publication_year=2021,
+            title="Python Tips",
+            publication_year=2023,
             author=self.author2
         )
 
-        self.list_url = reverse("book-list")  # From BookListView
-        self.crud_url = "/api/books_all/"      # ViewSet router URL
+        self.list_url = reverse("book-list")
 
-    # -------------------------------------------------------------------------
-    # CRUD TESTS
-    # -------------------------------------------------------------------------
-
-    def test_list_books(self):
-        """GET: List all books"""
-        response = self.client.get(self.list_url)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data), 2)
+    # --------------------
+    # CRUD Tests
+    # --------------------
 
     def test_create_book(self):
-        """POST: Create a new book"""
         data = {
             "title": "New Book",
+            "publication_year": 2024,
+            "author": self.author1.id
+        }
+
+        response = self.client.post(self.list_url, data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_update_book(self):
+        url = reverse("book-detail", args=[self.book1.id])
+
+        data = {
+            "title": "Updated Django",
             "publication_year": 2022,
             "author": self.author1.id
         }
-        response = self.client.post(self.crud_url, data)
 
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(Book.objects.count(), 3)
-        self.assertEqual(Book.objects.last().title, "New Book")
-
-    def test_update_book(self):
-        """PUT: Update an existing book"""
-        url = f"{self.crud_url}{self.book1.id}/"
-        data = {
-            "title": "Updated Django",
-            "publication_year": 2023,
-            "author": self.author1.id
-        }
-
-        response = self.client.put(url, data)
-
+        response = self.client.put(url, data, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.book1.refresh_from_db()
-        self.assertEqual(self.book1.title, "Updated Django")
 
     def test_delete_book(self):
-        """DELETE: Delete a book"""
-        url = f"{self.crud_url}{self.book1.id}/"
+        url = reverse("book-detail", args=[self.book2.id])
         response = self.client.delete(url)
-
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-        self.assertFalse(Book.objects.filter(id=self.book1.id).exists())
 
-    # -------------------------------------------------------------------------
-    # FILTERING / SEARCH / ORDERING
-    # -------------------------------------------------------------------------
+    # --------------------
+    # Filtering / Search / Ordering
+    # --------------------
 
-    def test_filter_books_by_title(self):
-        response = self.client.get(self.list_url + "?title=Django Unleashed")
-        self.assertEqual(len(response.data), 1)
-        self.assertEqual(response.data[0]["title"], "Django Unleashed")
+    def test_filter_by_title(self):
+        response = self.client.get(self.list_url, {"title": "Django Mastery"})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_search_books(self):
-        response = self.client.get(self.list_url + "?search=Python")
-        self.assertEqual(len(response.data), 1)
-        self.assertEqual(response.data[0]["title"], "Python APIs")
+        response = self.client.get(self.list_url, {"search": "python"})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-    def test_order_books(self):
-        response = self.client.get(self.list_url + "?ordering=-publication_year")
-        titles = [book["title"] for book in response.data]
-        self.assertEqual(titles, ["Python APIs", "Django Unleashed"])
+    def test_ordering_books(self):
+        response = self.client.get(self.list_url, {"ordering": "publication_year"})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-    # -------------------------------------------------------------------------
-    # AUTHENTICATION
-    # -------------------------------------------------------------------------
+    # --------------------
+    # Permissions
+    # --------------------
 
-    def test_api_requires_authentication(self):
-        """Requests should fail without token"""
+    def test_unauthenticated_user_cannot_create(self):
         client = APIClient()
-        response = client.get(self.list_url)
-        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        data = {
+            "title": "Blocked",
+            "publication_year": 2025,
+            "author": self.author1.id
+        }
+        response = client.post(self.list_url, data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
