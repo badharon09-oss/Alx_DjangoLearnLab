@@ -30,6 +30,19 @@ class UserListView(generics.ListAPIView):
     filter_backends = [filters.OrderingFilter]
     ordering_fields = ['username', 'email'] # Explicitly specify fields
     # or ordering_fields = '__all__' to allow all model fields
+from rest_framework import filters, generics
+# also import your model and serializer, e.g., from .models import Product
+# from .serializers import ProductSerializer
+
+class ProductListView(generics.ListAPIView):
+    # ... other attributes like queryset and serializer_class
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+    # Add filters.SearchFilter to filter_backends
+    filter_backends = [filters.SearchFilter]
+    # Specify the fields you want to search
+    search_fields = ['name', 'description', 'category__name'] 
+
 """
 BookListView implements advanced query capabilities:
 - Filtering: filter books by title, publication_year, or author name.
