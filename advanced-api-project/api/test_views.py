@@ -18,7 +18,7 @@ class BookAPITestCase(APITestCase):
 
         self.client = APIClient()
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
-
+self.client.force_authenticate(user=self.user)
         # Create author
         self.author1 = Author.objects.create(name="John Doe")
         self.author2 = Author.objects.create(name="Sarah Writer")
