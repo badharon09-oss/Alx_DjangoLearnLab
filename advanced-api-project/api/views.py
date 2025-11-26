@@ -23,7 +23,13 @@ class BookListView(generics.ListAPIView):
     # Ordering
     ordering_fields = ['title', 'publication_year']
     ordering = ['title']  # default
-
+from rest_framework import filters
+# ...
+class UserListView(generics.ListAPIView):
+    # ...
+    filter_backends = [filters.OrderingFilter]
+    ordering_fields = ['username', 'email'] # Explicitly specify fields
+    # or ordering_fields = '__all__' to allow all model fields
 """
 BookListView implements advanced query capabilities:
 - Filtering: filter books by title, publication_year, or author name.
