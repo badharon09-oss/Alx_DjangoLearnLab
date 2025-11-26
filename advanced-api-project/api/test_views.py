@@ -14,6 +14,7 @@ class BookAPITestCase(APITestCase):
 
         # Create API client
         self.client = APIClient()
+        self.client.login(username="ronald", password="password123")
         self.client.force_authenticate(user=self.user)
 
         # Create authors
