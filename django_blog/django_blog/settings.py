@@ -183,3 +183,17 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = []
 "USER": ...,
 "PORT": ...,
+
+# at top, ensure 'django.contrib.messages' and 'django.contrib.staticfiles' are present (default)
+INSTALLED_APPS = [
+    # ... default apps ...
+    'blog',              # your app
+]
+
+# Where to redirect after login/logout
+LOGIN_REDIRECT_URL = 'home'         # name of the view after login
+LOGOUT_REDIRECT_URL = 'home'
+LOGIN_URL = 'login'
+
+# static & templates defaults normally present:
+STATIC_URL = '/static/'
