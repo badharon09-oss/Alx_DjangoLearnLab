@@ -197,3 +197,10 @@ LOGIN_URL = 'login'
 
 # static & templates defaults normally present:
 STATIC_URL = '/static/'
+MIDDLEWARE = [
+    # ...
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    # ...
+]
+INSTALLED_APPS includes 'django.contrib.messages' by default.
