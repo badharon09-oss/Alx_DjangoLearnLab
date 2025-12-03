@@ -26,3 +26,7 @@
     {% endfor %}
   </ul>
 {% endif %}
+
+<form method="GET" action="{% url 'search' %}">
+    <input type="text" name="q" placeholder="Search posts...">
+</form>
