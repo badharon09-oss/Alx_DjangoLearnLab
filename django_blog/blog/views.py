@@ -140,3 +140,30 @@ class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     def test_func(self):
         comment = self.get_object()
         return comment.author == self.request.user
+
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.shortcuts import get_object_or_404, redirect
+from django.urls import reverse_lazy, reverse
+from django.views.generic import CreateView, UpdateView, DeleteView
+
+from .models import Post, Comment
+from .forms import CommentForm
+
+
+class CommentCreateView(LoginRequiredMixin, CreateView):
+    model = Comment
+    form_class = CommentForm
+
+    def form_valid(self, form):
+        # Set the comment author to the logged-in user
+        form.instance.author = self.request.user
+
+        # Retrieve the post the comment belongs to
+        post = get_object_or_404(Post, id=self.kwargs['post_id'])
+        form.instance.post = post
+
+        return super().form_valid(form)
+
+    # Redirect back to the blog post detail page after submitting a comment
+    def get_success_url(self):
+        return reverse('post-detail', kwargs={'pk': self.kwargs['post_id']})
