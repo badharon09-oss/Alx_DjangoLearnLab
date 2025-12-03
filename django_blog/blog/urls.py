@@ -22,14 +22,21 @@ urlpatterns = [
 ]
 
 from django.urls import path
-from . import views
+from .views import (
+    PostListView,
+    PostDetailView,
+    PostCreateView,
+    PostUpdateView,
+    PostDeleteView,
+)
 
 urlpatterns = [
-    path('posts/', views.PostListView.as_view(), name='post-list'),
-    path('posts/new/', views.PostCreateView.as_view(), name='post-create'),
-    path('posts/<int:pk>/', views.PostDetailView.as_view(), name='post-detail'),
-    path('posts/<int:pk>/edit/', views.PostUpdateView.as_view(), name='post-update'),
-    path('posts/<int:pk>/delete/', views.PostDeleteView.as_view(), name='post-delete'),
+    path('posts/', PostListView.as_view(), name='post-list'),
+    path('post/new/', PostCreateView.as_view(), name='post-create'),
+    path('post/<int:pk>/', PostDetailView.as_view(), name='post-detail'),
+    path('post/<int:pk>/update/', PostUpdateView.as_view(), name='post-update'),
+    path('post/<int:pk>/delete/', PostDeleteView.as_view(), name='post-delete'),
 ]
+
 
 path('', include('blog.urls')),   # already recommended earlier
