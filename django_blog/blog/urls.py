@@ -88,3 +88,11 @@ urlpatterns += [
     path("search/", SearchResultsView.as_view(), name="search"),
     path("tags/<str:tag_name>/", TagPostListView.as_view(), name="posts-by-tag"),
 ]
+
+<h2>Posts tagged "{{ request.resolver_match.kwargs.tag_name }}"</h2>
+
+{% for post in posts %}
+    <h3><a href="{% url 'post-detail' post.pk %}">{{ post.title }}</a></h3>
+{% empty %}
+    <p>No posts for this tag.</p>
+{% endfor %}
