@@ -75,3 +75,15 @@ class PostForm(forms.ModelForm):
 
         instance.tags.set(tags)
         return instance
+
+from django import forms
+from .models import Post
+from taggit.forms import TagWidget
+
+class PostForm(forms.ModelForm):
+    class Meta:
+        model = Post
+        fields = ['title', 'content', 'tags']
+        widgets = {
+            'tags': TagWidget(),   # ✔ Required for the task
+        }
