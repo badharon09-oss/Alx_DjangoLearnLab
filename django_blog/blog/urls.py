@@ -31,3 +31,5 @@ urlpatterns = [
     path('posts/<int:pk>/edit/', views.PostUpdateView.as_view(), name='post-update'),
     path('posts/<int:pk>/delete/', views.PostDeleteView.as_view(), name='post-delete'),
 ]
+
+path('', include('blog.urls')),   # already recommended earlier
