@@ -183,3 +183,21 @@ class SearchResultsView(ListView):
             Q(content__icontains=query) |
             Q(tags__name__icontains=query)
         ).distinct()
+
+from django.views.generic import ListView
+from .models import Post
+from taggit.models import Tag
+
+class PostByTagListView(ListView):
+    model = Post
+    template_name = 'blog/post_by_tag.html'
+    context_object_name = 'posts'
+
+    def get_queryset(self):
+        self.tag_slug = self.kwargs.get('tag_slug')
+        return Post.objects.filter(tags__slug=self.tag_slug)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['tag'] = self.tag_slug
+        return context
