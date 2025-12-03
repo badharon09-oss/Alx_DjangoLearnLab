@@ -41,3 +41,9 @@ class Comment(models.Model):
     def get_absolute_url(self):
         # redirect back to the post detail page after actions
         return reverse('post-detail', kwargs={'pk': self.post.pk})
+
+class Tag(models.Model):
+    name = models.CharField(max_length=50, unique=True)
+
+    def __str__(self):
+        return self.name
