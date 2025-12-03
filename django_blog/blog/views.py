@@ -167,3 +167,19 @@ class CommentCreateView(LoginRequiredMixin, CreateView):
     # Redirect back to the blog post detail page after submitting a comment
     def get_success_url(self):
         return reverse('post-detail', kwargs={'pk': self.kwargs['post_id']})
+
+from django.db.models import Q
+from .models import Post, Tag
+
+class SearchResultsView(ListView):
+    model = Post
+    template_name = "blog/search_results.html"
+    context_object_name = "posts"
+
+    def get_queryset(self):
+        query = self.request.GET.get("q")
+        return Post.objects.filter(
+            Q(title__icontains=query) |
+            Q(content__icontains=query) |
+            Q(tags__name__icontains=query)
+        ).distinct()
