@@ -12,6 +12,8 @@ INSTALLED_APPS = [
 
     # Local
     'accounts',
+    'posts',
+    
 ]
 AUTH_USER_MODEL = 'accounts.User'
 REST_FRAMEWORK = {
