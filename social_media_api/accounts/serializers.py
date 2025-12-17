@@ -51,3 +51,32 @@ class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['username', 'email', 'bio', 'followers_count']
+from django.contrib.auth import get_user_model
+from rest_framework import serializers
+
+User = get_user_model()
+
+
+class UserRegistrationSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True)
+
+    class Meta:
+        model = User
+        fields = [
+            'id',
+            'username',
+            'email',
+            'password',
+            'bio',
+            'profile_picture'
+        ]
+
+    def create(self, validated_data):
+        password = validated_data.pop('password')
+
+        user = get_user_model().objects.create_user(
+            password=password,
+            **validated_data
+        )
+
+        return user
