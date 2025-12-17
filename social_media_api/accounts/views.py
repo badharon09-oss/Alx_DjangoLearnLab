@@ -7,6 +7,24 @@ from .serializers import (
     UserProfileSerializer
 )
 
+from django.contrib.auth import get_user_model
+
+CustomUser = get_user_model()
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def list_users(request):
+    """
+    Returns a list of all users.
+    This view exists to support user discovery and follow functionality.
+    """
+    users = CustomUser.objects.all()
+    data = [{"id": user.id, "username": user.username} for user in users]
+    return Response(data)
 
 class RegisterView(generics.CreateAPIView):
     queryset = User.objects.all()
