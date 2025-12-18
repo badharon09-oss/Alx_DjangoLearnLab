@@ -70,3 +70,21 @@ def feed(request):
 
     serializer = PostSerializer(posts, many=True)
     return Response(serializer.data)
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def like_post(request, pk):
+    post = Post.objects.get(pk=pk)
+    user = request.user
+
+    like, created = Like.objects.get_or_create(user=user, post=post)
+
+    if created:
+        Notification.objects.create(
+            recipient=post.author,
+            actor=user,
+            verb='liked your post',
+            target=post
+        )
+
+    return Response({'status': 'post liked'})
