@@ -40,7 +40,7 @@ from decouple import config
 import dj_database_url
 from pathlib import Path
 DEBUG = config('DEBUG', default=False, cast=bool)
-
+DEBUG = False
 SECRET_KEY = config('SECRET_KEY')
 
 ALLOWED_HOSTS = config(
