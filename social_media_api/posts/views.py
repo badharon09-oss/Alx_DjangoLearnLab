@@ -88,3 +88,13 @@ def like_post(request, pk):
         )
 
     return Response({'status': 'post liked'})
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def unlike_post(request, pk):
+    post = Post.objects.get(pk=pk)
+    user = request.user
+
+    Like.objects.filter(user=user, post=post).delete()
+
+    return Response({'status': 'post unliked'})
