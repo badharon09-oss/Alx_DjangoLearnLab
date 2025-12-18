@@ -42,7 +42,7 @@ from pathlib import Path
 DEBUG = config('DEBUG', default=False, cast=bool)
 DEBUG = False
 SECRET_KEY = config('SECRET_KEY')
-
+"PORT", "PASSWORD", "NAME"
 ALLOWED_HOSTS = config(
     'ALLOWED_HOSTS',
     default='localhost',
