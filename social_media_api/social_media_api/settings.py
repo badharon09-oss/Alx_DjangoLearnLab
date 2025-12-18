@@ -13,6 +13,8 @@ INSTALLED_APPS = [
     # Local
     'accounts',
     'posts',
+    'notifications',
+
     
 ]
 AUTH_USER_MODEL = 'accounts.User'
